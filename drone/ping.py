@@ -1,5 +1,5 @@
 """ The pinging drone """
-import subprocess
+from subprocess import Popen,PIPE
 from collectclient import Collector
 import requests
 import settings
@@ -20,15 +20,12 @@ class Drone:
     self.ips=[i["attributes"]["ip_address"]["address"] for i in ips["entries"]]
 
   def run(self):
-    try:
-      ping=subprocess.check_output(pingc+self.ips,stderr=subprocess.STDOUT)
-    except subprocess.CalledProcessError, e:
-      ping=e.output
+    p=Popen(pingc+self.ips,stderr=PIPE,stdout=PIPE)
     c=Collector(test=self.name,resource="address",id=self.ips[0])
     ipm=re.compile("([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})")
     pks=re.compile("([0-9]+)/([0-9]+)/([0-9]+)%")
     rtts=re.compile("([0-9.]+)/([0-9.]+)/([0-9.]+)$")
-    for l in ping.split("\n"):
+    for l in p.stderr:
       data={}
       m=ipm.search(l)
       if m:
