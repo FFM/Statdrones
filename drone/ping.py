@@ -15,7 +15,7 @@ class Drone:
   apiurl="FFM-Net_Interface_in_IP4_Network/?verbose"
 
   def __init__(self):
-    r=requests.get("%s/%s"%(settings.nodedb,self.apiurl),verify=False,auth=settins.auth)
+    r=requests.get("%s/%s"%(settings.nodedb,self.apiurl),verify=False,auth=settings.auth)
     ips=r.json()
     self.ips=[i["attributes"]["ip_address"]["address"] for i in ips["entries"]]
 
