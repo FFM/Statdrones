@@ -13,6 +13,7 @@ Dependencies
 ------------
 
 * collectclient (for access to `Collector`)
+* requests (for access to nodedb REST API)
 
 Ping
 ____
